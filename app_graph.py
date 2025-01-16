@@ -1,5 +1,7 @@
 import streamlit as st
 import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 list_datasets = sns.get_dataset_names()
 
@@ -22,6 +24,8 @@ eval(f"st.{graph}_chart(df, x = x_axis, y = y_axis)")
 matrix = st.checkbox('Do you want me to show you correlation matrix?')
 if matrix:
     if (df[x_axis].dtype in ["float64", "int64"]) and (df[y_axis].dtype in ["float64", "int64"]):
-        sns.heatmap(df.corr(), x_axis, y_axis, annot=True)
+        sns.heatmap(df[[f"{x_axis}", f"{y_axis}"]].corr(),  annot=True)
+        st.pyplot(plt.gcf())
+
     else:
         st.markdown(f"#### :red[You need to chose numeric columns. Chose between these {df.select_dtypes(['float64', 'int64']).columns.values}]")
